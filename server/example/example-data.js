@@ -3,27 +3,27 @@ var fakeMessages = {
   results: [
     {
       username: "Cat",
-      message: "meow meow",
+      text: "meow meow",
       roomname: 'lobby'
     },
     {
       username: "Dog",
-      message: "woof woof",
+      text: "woof woof",
       roomname: 'lobby'
     },
     {
       username: "Bird",
-      message: "chirp chirp",
+      text: "chirp chirp",
       roomname: 'lobby'
     },
     {
       username: "Snake",
-      message: "hisssssss",
+      text: "hisssssss",
       roomname: 'other'
     },
     {
       username: "Chicken",
-      message: "bock bock",
+      text: "bock bock",
       roomname: 'bath'
     }
 

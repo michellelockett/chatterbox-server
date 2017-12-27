@@ -26,15 +26,22 @@
     <div id="main">
       <h1>chatterbox</h1>
       <!-- Your HTML goes here! -->
-    <form accept-charset: "character_set">
-        <input type = "text" id = "message">
-        <button type = "button" id = "send">Submit</button>
-        <button type = "button" id = "clear">Clear Messages</button>
-        <button type = "button" id = "get">Get Messages</button>
-      </form>
-      <select id="roomSelect">
-      </select>
-    </div>
+    <div class="spinner"><img src="images/spiffygif_46x46.gif"></div>
+      <div id="rooms">
+        Room:
+        <select id="roomSelect">
+        </select>
+      </div>
+      <form action="#" id="send" method="post">
+        <input type="text" name="message" id="message"/>
+        <input type="submit" name="submit" class="submit"/>
+      </form>    </div>
     <div id="chats"></div>
+
+    <script>
+      $(function(){
+        app.init()
+      });
+    </script>
   </body>
 </html>

@@ -137,16 +137,12 @@ var actions = {
       res.writeHead(404, headers);
       res.end('bad request');
     }
+  },
+
+  'OPTIONS': function(req, res) {
+    res.writeHead(200, defaultCorsHeaders);
+    res.end('options were successful');
   }
-
-  // POST
-  // when user posts a new message
-  // check to make sure URL is correct
-    // if it is, add message object to wherever we store messages
-    // send back a confirmation/success
-    // also detect if current or new room
-
-  // OPTIONS
 
   // DEFAULT
     // send some type of error code
