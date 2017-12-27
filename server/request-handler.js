@@ -105,12 +105,39 @@ var actions = {
       res.writeHead(404, headers);
       res.end('bad request');
     }
+  },
+  'POST' : function(req, res) {
+    var headers = defaultCorsHeaders;
+    headers['Content-Type'] = 'application/json';
+    var parsedUrl = url.parse(req.url, true);
+    if (parsedUrl.pathname === '/classes/messages') {
+      res.writeHead(201, headers);
+
+      // var body = [];
+      // req.on('data', (chunk) => {
+      //   body.push(chunk);
+      // }).on('end', () => {
+      //   body = Buffer.concat(body).toString();
+      // });
+
+      var data = '';
+      req.on('data', function(chunk) {
+        data += chunk;
+      });
+      req.on('end', function() {
+        console.log('fully chunked data ------>', data);
+        fakeData.fakeMessages.results.unshift(JSON.parse(data));
+      });
+
+      // push the req message part into our fakeData.results array
+      // then response.end('successfully posted')
+      res.end('end of post');
+    } else {
+      // check rest of headers
+      res.writeHead(404, headers);
+      res.end('bad request');
+    }
   }
-  // GET
-  // responds to fetch request from client
-  // check to make sure URL is correct (parse url?)
-    // if it is, send back the data in question
-    // if url is not, send an error message
 
   // POST
   // when user posts a new message
