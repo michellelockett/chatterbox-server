@@ -1,3 +1,10 @@
+/* Import example data */
+/* remember to call fakeData.fakeMessages */
+var fakeData = require('./example/example-data.js');
+
+/* Import url module */
+var url = require('url');
+
 /*************************************************************
 
 You should implement your request handler function in this file.
@@ -29,21 +36,29 @@ var requestHandler = function(request, response) {
   // console.logs in your code.
   console.log('Serving request type ' + request.method + ' for url ' + request.url);
 
+  // check to see method of request
+  // then grab the functionality stored in actions obj and run it
+  // actions[request.method]
+  var action = actions[request.method];
+  action(request, response);
+
+
+
   // The outgoing status.
-  var statusCode = 200;
+  // var statusCode = 200;
 
   // See the note below about CORS headers.
-  var headers = defaultCorsHeaders;
+  // var headers = defaultCorsHeaders;
 
   // Tell the client we are sending them plain text.
   //
   // You will need to change this if you are sending something
   // other than plain text, like JSON or HTML.
-  headers['Content-Type'] = 'application/json';
+  // headers['Content-Type'] = 'application/json';
 
   // .writeHead() writes to the request line and headers of the response,
   // which includes the status and all headers.
-  response.writeHead(statusCode, headers);
+  // response.writeHead(statusCode, headers);
 
   // Make sure to always call response.end() - Node may not send
   // anything back to the client until you do. The string you pass to
@@ -52,7 +67,12 @@ var requestHandler = function(request, response) {
   //
   // Calling .end "flushes" the response's internal buffer, forcing
   // node to actually send all the data over to the client.
-  response.end('Hello, World!');
+  // response.end('Hello, World!');
+
+  // we may send back object messages or
+  // a success message or error message
+  // if error message change status code
+
 };
 
 // These headers will allow Cross-Origin Resource Sharing (CORS).
@@ -69,6 +89,41 @@ var defaultCorsHeaders = {
   'access-control-allow-methods': 'GET, POST, PUT, DELETE, OPTIONS',
   'access-control-allow-headers': 'content-type, accept',
   'access-control-max-age': 10 // Seconds.
+};
+
+// Object to map actions to functions
+var actions = {
+  'GET' : function(req, res) {
+    var headers = defaultCorsHeaders;
+    headers['Content-Type'] = 'application/json';
+    var parsedUrl = url.parse(req.url, true);
+    if (parsedUrl.pathname === '/classes/messages') {
+      res.writeHead(200, headers);
+      res.end(JSON.stringify(fakeData.fakeMessages));
+    } else {
+      // check rest of headers
+      res.writeHead(404, headers);
+      res.end('bad request');
+    }
+  }
+  // GET
+  // responds to fetch request from client
+  // check to make sure URL is correct (parse url?)
+    // if it is, send back the data in question
+    // if url is not, send an error message
+
+  // POST
+  // when user posts a new message
+  // check to make sure URL is correct
+    // if it is, add message object to wherever we store messages
+    // send back a confirmation/success
+    // also detect if current or new room
+
+  // OPTIONS
+
+  // DEFAULT
+    // send some type of error code
+
 };
 
 exports.requestHandler = requestHandler;
