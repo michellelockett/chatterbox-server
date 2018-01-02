@@ -108,7 +108,7 @@ var actions = {
   },
   'POST' : function(req, res) {
     var headers = defaultCorsHeaders;
-    headers['Content-Type'] = 'application/json';
+    headers['Content-Type'] = 'plain/text';
     var parsedUrl = url.parse(req.url, true);
     if (parsedUrl.pathname === '/classes/messages') {
       res.writeHead(201, headers);
@@ -119,19 +119,23 @@ var actions = {
       // }).on('end', () => {
       //   body = Buffer.concat(body).toString();
       // });
-
+      var addedLobby = null;
       var data = '';
       req.on('data', function(chunk) {
         data += chunk;
       });
       req.on('end', function() {
+        var message = JSON.parse(data);
+        if (!message.roomname) {
+          message.roomname = 'lobby';
+          addedLobby = true;
+        }
         console.log('fully chunked data ------>', data);
-        fakeData.fakeMessages.results.unshift(JSON.parse(data));
+        fakeData.fakeMessages.results.unshift(message);
+        //console.log('fake data ------------>', fakeData.fakeMessages.results[0]);
       });
 
-      // push the req message part into our fakeData.results array
-      // then response.end('successfully posted')
-      res.end('end of post');
+      res.end(addedLobby ? 'No roomname was provided.  Your message has been assigned to the room "lobby"': 'successful post');
     } else {
       // check rest of headers
       res.writeHead(404, headers);
@@ -142,11 +146,17 @@ var actions = {
   'OPTIONS': function(req, res) {
     res.writeHead(200, defaultCorsHeaders);
     res.end('options were successful');
-  }
+  },
 
-  // DEFAULT
-    // send some type of error code
+  'PUT': function(req, res) {
+    res.writeHead(405, defaultCorsHeaders);
+    res.end('PUT requests are not allowed');
+  },
 
+  'DELETE': function(req, res) {
+    res.writeHead(405, defaultCorsHeaders);
+    res.end('DELETE requests are not allowed');
+  },
 };
 
 exports.requestHandler = requestHandler;

@@ -23,6 +23,36 @@ describe('Node Server Request Listener Function', function() {
     expect(res._ended).to.equal(true);
   });
 
+  it('Should answer OPTIONS requests for /classes/messages with a 200 status code', function() {
+    var req = new stubs.request('/classes/messages', 'OPTIONS');
+    var res = new stubs.response();
+
+    handler.requestHandler(req, res);
+
+    expect(res._responseCode).to.equal(200);
+    expect(res._ended).to.equal(true);
+  });
+
+  it('Should answer PUT requests for /classes/messages with a 405 status code', function() {
+    var req = new stubs.request('/classes/messages', 'PUT');
+    var res = new stubs.response();
+
+    handler.requestHandler(req, res);
+
+    expect(res._responseCode).to.equal(405);
+    expect(res._ended).to.equal(true);
+  });
+
+  it('Should answer DELETE requests for /classes/messages with a 405 status code', function() {
+    var req = new stubs.request('/classes/messages', 'DELETE');
+    var res = new stubs.response();
+
+    handler.requestHandler(req, res);
+
+    expect(res._responseCode).to.equal(405);
+    expect(res._ended).to.equal(true);
+  });
+
   it('Should send back parsable stringified JSON', function() {
     var req = new stubs.request('/classes/messages', 'GET');
     var res = new stubs.response();
@@ -116,4 +146,20 @@ describe('Node Server Request Listener Function', function() {
       });
   });
 
+  it('should respond when a roomname is not included in the message', function() {
+    var stubMsg = {
+      username: 'Jono',
+      message: 'Do my bidding!'
+    };
+    var req = new stubs.request('/classes/messages', 'POST', stubMsg);
+    var res = new stubs.response();
+
+    handler.requestHandler(req, res);
+
+    // Expect 201 Created response status
+    expect(res._responseCode).to.equal(201);
+
+    expect(res._data).to.equal('No roomname was provided.  Your message has been assigned to the room "lobby"');
+    expect(res._ended).to.equal(true);
+  });
 });
