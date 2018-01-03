@@ -1,9 +1,12 @@
 /* Import example data */
 /* remember to call fakeData.fakeMessages */
 var fakeData = require('./example/example-data.js');
-
 /* Import url module */
 var url = require('url');
+/* Import fs module */
+var fs = require('fs');
+/* Import path module */
+var path = require('path');
 
 /*************************************************************
 
@@ -35,12 +38,51 @@ var requestHandler = function(request, response) {
   // debugging help, but you should always be careful about leaving stray
   // console.logs in your code.
   console.log('Serving request type ' + request.method + ' for url ' + request.url);
-
+  var parsed = url.parse(request.url, true).pathname;
   // check to see method of request
   // then grab the functionality stored in actions obj and run it
   // actions[request.method]
-  var action = actions[request.method];
-  action(request, response);
+
+  if (request.method === 'GET' && parsed === "/") {
+    //read test.html, send back to user
+    var indexPath = path.join('client', 'index.html');
+    var html = fs.createReadStream(indexPath, 'utf-8');
+    response.writeHead(200, {'Content-Type': 'text/html'});
+    html.pipe(response);
+  } else if (request.method === 'GET' && parsed === "/styles/styles.css") {
+    console.log("you've got style");
+    var stylePath = path.join('client', 'styles', 'styles.css');
+    var style = fs.createReadStream(stylePath, 'utf-8');
+    response.writeHead(200, {'Content-Type': 'text/css'});
+    style.pipe(response);
+  } else if (request.method === 'GET' && parsed === "/scripts/app.js") {
+    var appPath = path.join('client', 'scripts', 'app.js');
+    var javascript = fs.createReadStream(appPath, 'utf-8');
+    response.writeHead(200, {'Content-Type': 'text/javascript'});
+    javascript.pipe(response);
+  } else {
+    var action = actions[request.method];
+    action(request, response);
+  }
+
+
+  // 'GET' : function(req, res) {
+  // var headers = defaultCorsHeaders;
+  // headers['Content-Type'] = 'application/json';
+  // var parsedUrl = url.parse(req.url, true);
+  // if (parsedUrl.pathname === '/classes/messages') {
+  //   res.writeHead(200, headers);
+  //   res.end(JSON.stringify(fakeData.fakeMessages));
+  // } else {
+  //   // check rest of headers
+  //   res.writeHead(404, headers);
+  //   res.end('bad request');
+  // }
+
+
+
+
+
 
 
 
