@@ -4,29 +4,33 @@ var fakeMessages = {
     {
       username: "Cat",
       text: "meow meow",
-      roomname: 'lobby'
+      roomname: "lobby",
+      objectId: 1
     },
     {
       username: "Dog",
       text: "woof woof",
-      roomname: 'lobby'
+      roomname: "lobby",
+      objectId: 2
     },
     {
       username: "Bird",
       text: "chirp chirp",
-      roomname: 'lobby'
+      roomname: "lobby",
+      objectId: 3
     },
     {
       username: "Snake",
       text: "hisssssss",
-      roomname: 'other'
+      roomname: "other",
+      objectId: 4
     },
     {
       username: "Chicken",
       text: "bock bock",
-      roomname: 'bath'
+      roomname: "bath",
+      objectId: 5
     }
-
   ]
 };
 
